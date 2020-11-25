@@ -9,7 +9,6 @@ import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.OnLifecycleEvent;
-import androidx.lifecycle.Transformations;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import edu.cnm.deepdive.gallery.model.Image;
 import edu.cnm.deepdive.gallery.model.User;
@@ -41,7 +40,6 @@ public class MainViewModel extends AndroidViewModel implements LifecycleObserver
     image = new MutableLiveData<>();
     throwable = new MutableLiveData<>();
     pending = new CompositeDisposable();
-//    getUserProfile();
     loadImages();
   }
 
