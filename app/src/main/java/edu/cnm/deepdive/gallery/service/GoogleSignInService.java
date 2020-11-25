@@ -3,7 +3,6 @@ package edu.cnm.deepdive.gallery.service;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
-import android.util.Log;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -15,6 +14,8 @@ import io.reactivex.Completable;
 import io.reactivex.Single;
 
 public class GoogleSignInService {
+
+  private static final String BEARER_TOKEN_FORMAT = "Bearer %s";
 
   private static Application context;
 
@@ -53,6 +54,11 @@ public class GoogleSignInService {
     );
   }
 
+  public Single<String> refreshBearerToken() {
+    return refresh()
+        .map((account) -> String.format(BEARER_TOKEN_FORMAT, account.getIdToken()));
+  }
+
   public void startSignIn(Activity activity, int requestCode) {
     account = null;
     Intent intent = client.getSignInIntent();
@@ -81,10 +87,6 @@ public class GoogleSignInService {
 
   private void setAccount(GoogleSignInAccount account) {
     this.account = account;
-    if (account != null) {
-      //noinspection ConstantConditions
-      Log.d(getClass().getSimpleName(), account.getIdToken());
-    }
   }
 
   private static class InstanceHolder {

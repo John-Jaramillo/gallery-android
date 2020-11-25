@@ -1,7 +1,9 @@
 package edu.cnm.deepdive.gallery.controller;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -27,18 +29,18 @@ public class MainActivity extends AppCompatActivity {
     setContentView(binding.getRoot());
     Toolbar toolbar = binding.toolbar;
     setSupportActionBar(toolbar);
-    FloatingActionButton fab = binding.fab;
-    fab.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-            .setAction("Action", null).show();
-      }
-    });
     viewModel = new ViewModelProvider(this).get(MainViewModel.class);
     getLifecycle().addObserver(viewModel);
-    viewModel.getThrowable().observe(this, (throwable) ->
-        Toast.makeText(this, throwable.getMessage(), Toast.LENGTH_LONG).show());
+    viewModel.getThrowable().observe(this, (throwable) -> {
+      if (throwable != null) {
+        Toast.makeText(this, throwable.getMessage(), Toast.LENGTH_LONG).show();
+      }
+    });
+    viewModel.getUser().observe(this, (user) -> {
+      if (user == null) {
+        switchToLogin();
+      }
+    });
   }
 
   @Override
@@ -50,16 +52,28 @@ public class MainActivity extends AppCompatActivity {
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    // Handle action bar item clicks here. The action bar will
-    // automatically handle clicks on the Home/Up button, so long
-    // as you specify a parent activity in AndroidManifest.xml.
-    int id = item.getItemId();
-
-    //noinspection SimplifiableIfStatement
-    if (id == R.id.action_settings) {
-      return true;
+    boolean handled = true;
+    //noinspection SwitchStatementWithTooFewBranches
+    switch (item.getItemId()) {
+      case R.id.action_sign_out:
+        viewModel.signOut();
+        break;
+      default:
+        handled = super.onOptionsItemSelected(item);
     }
-
-    return super.onOptionsItemSelected(item);
+    return handled;
   }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+  }
+
+  private void switchToLogin() {
+    startActivity(
+        new Intent(this, LoginActivity.class)
+            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK)
+    );
+  }
+
 }

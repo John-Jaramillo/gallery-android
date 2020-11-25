@@ -17,7 +17,7 @@ public class User {
   private Date updated;
 
   @Expose
-  private String displayName;
+  private String name;
 
   @Expose
   private URL href;
@@ -46,12 +46,12 @@ public class User {
     this.updated = updated;
   }
 
-  public String getDisplayName() {
-    return displayName;
+  public String getName() {
+    return name;
   }
 
-  public void setDisplayName(String displayName) {
-    this.displayName = displayName;
+  public void setName(String name) {
+    this.name = name;
   }
 
   public URL getHref() {

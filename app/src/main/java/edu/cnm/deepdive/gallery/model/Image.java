@@ -16,6 +16,9 @@ public class Image {
   private String name;
 
   @Expose
+  private String title;
+
+  @Expose
   private String description;
 
   @Expose
@@ -49,6 +52,14 @@ public class Image {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
   }
 
   public String getDescription() {

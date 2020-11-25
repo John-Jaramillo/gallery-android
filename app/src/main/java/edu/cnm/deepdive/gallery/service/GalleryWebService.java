@@ -30,14 +30,20 @@ public interface GalleryWebService {
 
   @Multipart
   @POST("images")
-  Single<Image> post(@Header("Authorization") String bearerToken,
-      @Part MultipartBody.Part file, @Part RequestBody description);
+  Single<Image> post(@Header("Authorization") String bearerToken, @Part MultipartBody.Part file,
+      @Part("title") RequestBody title, @Part("description") RequestBody description);
+
+  @Multipart
+  @POST("images")
+  Single<Image> post(@Header("Authorization") String bearerToken, @Part MultipartBody.Part file,
+      @Part("title") RequestBody title);
+
+  @GET("user/{id}/images")
+  Single<List<Image>> getUserImages(
+      @Header("Authorization") String bearerToken, @Path("id") UUID id);
 
   @GET("images")
-  Single<List<Image>> get(@Header("Authorization") String bearerToken);
-
-  @GET("images/{id}")
-  Single<Image> get(@Header("Authorization") String bearerToken, @Path("id") UUID id);
+  Single<List<Image>> getAllImages(@Header("Authorization") String bearerToken);
 
   static GalleryWebService getInstance() {
     return InstanceHolder.INSTANCE;
